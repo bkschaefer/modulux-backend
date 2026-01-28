@@ -1,0 +1,23 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] - 2025-01-28
+
+### Added
+
+- Dynamic schema creation system for flexible content modeling
+- JWT-based authentication with token renewal
+- Role-based permission system (Admin, User Manager, Content Editor, Schema Editor)
+- RESTful API for collections, entries, and schema management
+- AWS S3 integration for file/image storage
+- Email service integration (Brevo) for invitations and password reset
+- Ollama AI integration for content generation
+- Interactive Swagger/OpenAPI documentation
+- Docker Compose setup for local MongoDB
+- Comprehensive test suite with Jest and MongoDB Memory Server
+- Winston logging with configurable levels
+- Environment variable validation system

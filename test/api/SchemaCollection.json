@@ -1,0 +1,228 @@
+{
+    "info": {
+      "name": "Schema and Collection API Tests",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Schema Routes",
+        "item": [
+          {
+            "name": "Create Schema",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/schema",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "schema"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"blog_article\", \"title\": \"Blog Article\", \"description\": \"Schema for blog articles\", \"creator\": \"675093ad698f2e72348f80fe\", \"userId\": \"675093ad698f2e72348f80fe\", \"schemaDefinition\": \"{\\\"name\\\": \\\"blog_article\\\", \\\"fields\\\": [{\\\"name\\\": \\\"title\\\", \\\"label\\\": \\\"Article Title\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"The Benefits of Morning Exercise\\\", \\\"maxLength\\\": 100, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"author\\\", \\\"label\\\": \\\"Author\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"Jane Doe\\\", \\\"maxLength\\\": 50, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"publishedDate\\\", \\\"label\\\": \\\"Published Date\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"2024-11-13\\\", \\\"pattern\\\": \\\"^\\\\\\\\d{4}-\\\\\\\\d{2}-\\\\\\\\d{2}$\\\", \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"tags\\\", \\\"label\\\": \\\"Tags\\\", \\\"fieldType\\\": \\\"FieldArray\\\", \\\"required\\\": false, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}, \\\"field\\\": {\\\"name\\\": \\\"tag\\\", \\\"label\\\": \\\"Tag\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"maxLength\\\": 20}}, {\\\"name\\\": \\\"content\\\", \\\"label\\\": \\\"Content\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}]}\"}"
+              }
+            }
+          },
+          {
+            "name": "Get Schema",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/schema/blog_article",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "schema", "blog_article"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"userId\": \"675093ad698f2e72348f80fe\"}"
+              }
+            }
+          },
+          {
+            "name": "Update Schema",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/schema/blog_article",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "schema", "blog_article"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"blog_article\", \"title\": \"Updated Blog Article\", \"description\": \"Updated schema for blog articles\", \"userId\": \"675093ad698f2e72348f80fe\", \"schemaDefinition\": \"{\\\"name\\\": \\\"blog_article\\\", \\\"fields\\\": [{\\\"name\\\": \\\"title\\\", \\\"label\\\": \\\"Article Title\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"The Benefits of Morning Exercise\\\", \\\"maxLength\\\": 100, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"author\\\", \\\"label\\\": \\\"Author\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"Jane Doe\\\", \\\"maxLength\\\": 50, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"publishedDate\\\", \\\"label\\\": \\\"Published Date\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"defaultValue\\\": \\\"2024-11-13\\\", \\\"pattern\\\": \\\"^\\\\\\\\d{4}-\\\\\\\\d{2}-\\\\\\\\d{2}$\\\", \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}, {\\\"name\\\": \\\"tags\\\", \\\"label\\\": \\\"Tags\\\", \\\"fieldType\\\": \\\"FieldArray\\\", \\\"required\\\": false, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}, \\\"field\\\": {\\\"name\\\": \\\"tag\\\", \\\"label\\\": \\\"Tag\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"maxLength\\\": 20}}, {\\\"name\\\": \\\"content\\\", \\\"label\\\": \\\"Content\\\", \\\"fieldType\\\": \\\"TextField\\\", \\\"required\\\": true, \\\"settings\\\": {\\\"dataTable\\\": {\\\"visible\\\": true, \\\"columnWidth\\\": 200}}}]}\"}"
+              }
+            }
+          },
+          {
+            "name": "Delete Schema",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/schema/blog_article",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "schema", "blog_article"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"userId\": \"675093ad698f2e72348f80fe\"}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Collection Routes",
+        "item": [
+          {
+            "name": "Create Collection",
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/collection",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "collection"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"title\": \"Blog Articles\", \"name\": \"blog_articles\", \"schema\": \"675093ad698f2e72348f80fe\", \"description\": \"Collection of blog articles\", \"creator\": \"675093ad698f2e72348f80fe\", \"userId\": \"675093ad698f2e72348f80fe\", \"entries\": [{\"data\": {\"title\": \"The Benefits of Morning Exercise\", \"author\": \"Jane Doe\", \"publishedDate\": \"2024-11-13\", \"tags\": [\"health\", \"fitness\", \"lifestyle\"], \"content\": \"Regular morning exercise has numerous benefits for both physical and mental health...\"}}]}"
+              }
+            }
+          },
+          {
+            "name": "Get Collection",
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/collection/blog_articles",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "collection", "blog_articles"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"userId\": \"675093ad698f2e72348f80fe\"}"
+              }
+            }
+          },
+          {
+            "name": "Update Collection",
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/collection/blog_articles",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "collection", "blog_articles"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"title\": \"Updated Blog Articles\", \"name\": \"blog_articles\", \"description\": \"Updated collection of blog articles\", \"userId\": \"675093ad698f2e72348f80fe\", \"entries\": [{\"data\": {\"title\": \"Updated: The Benefits of Morning Exercise\", \"author\": \"Jane Smith\", \"publishedDate\": \"2024-11-14\", \"tags\": [\"health\", \"fitness\", \"wellness\"], \"content\": \"Updated content: Regular morning exercise has numerous benefits...\"}}]}"
+              }
+            }
+          },
+          {
+            "name": "Delete Collection",
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer {{authToken}}",
+                  "type": "text"
+                }
+              ],
+              "url": {
+                "raw": "localhost:3000/api/collection/blog_articles",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "collection", "blog_articles"]
+              },
+              "body": {
+                "mode": "raw",
+                "raw": "{\"userId\": \"675093ad698f2e72348f80fe\"}"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "authToken",
+        "value": "your-auth-token-here"
+      }
+    ]
+  }
