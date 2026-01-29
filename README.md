@@ -189,9 +189,11 @@ See [.env.example](.env.example) for full configuration options.
 
 Please read our [Contributing Guide](CONTRIBUTING.md) before submitting Pull Requests.
 
-## Author
+## About This Project
 
-Benedikt Schäfer
+This project was developed as part of a self-organized group project during my Media Informatics (B.Sc.) studies at [Berlin University of Applied Sciences (BHT)](https://www.bht-berlin.de/). The backend was primarily developed by myself and one other team member. Other contributors' names have been omitted for privacy reasons.
+
+**Author:** Benedikt Schäfer
 
 ## Related Projects
 
