@@ -195,11 +195,6 @@ This project was developed as part of a self-organized group project during my M
 
 **Author:** Benedikt Schäfer
 
-## Related Projects
-
-- **Modulux Dashboard** - Frontend application for content management
-- **Documentation** - [docs.modulux.io](https://docs.modulux.io)
-
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
