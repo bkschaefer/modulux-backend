@@ -23,20 +23,19 @@ export async function requiresAuthentication(
   res: Response,
   next: NextFunction,
 ) {
-  const apiKey = req.headers['x-api-key'];
+  const apiKey = req.headers['x-api-key']
   if (apiKey) {
-    const keyIsValid = await apiKeyExists(apiKey as string);
+    const keyIsValid = await apiKeyExists(apiKey as string)
     if (keyIsValid) {
-      req.apiKey = apiKey as string;
-      return next();
+      req.apiKey = apiKey as string
+      return next()
     }
   }
-  
 
   if (!req.cookies) {
     return next(new HttpError(401))
   }
-  
+
   const jwtString = req.cookies['access_token']
   if (!jwtString) {
     return next(new HttpError(401))
@@ -56,4 +55,3 @@ export async function requiresAuthentication(
     next(new HttpError(401))
   }
 }
-

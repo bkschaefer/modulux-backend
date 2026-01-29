@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { body, matchedData, param, validationResult } from "express-validator";
-import { catchAsync } from "../../helper/catchAsync";
-import { HttpError, HttpError400 } from "../../errors/HttpError";
+import { Router } from 'express'
+import { body, matchedData, param, validationResult } from 'express-validator'
+import { catchAsync } from '../../helper/catchAsync'
+import { HttpError, HttpError400 } from '../../errors/HttpError'
 
 import {
   changePassword,
@@ -11,18 +11,18 @@ import {
   getUser,
   queryUser,
   updateUser,
-  assignRoles
-} from "../../services/user-services/user.services";
-import { requiresAuthentication } from "../../middleware/requireAuth";
-import { requiresInvite } from "../../middleware/requireInvite";
-import { invalidateInvite } from "../../services/user-services/registration.services";
-import { logger } from "../../logger";
-import { verify } from "jsonwebtoken";
-import { TUserResource } from "../../types/user.types";
-import { Role } from "../../types/permission.types";
-import { hasPermission } from "../../middleware/requirePermission";
+  assignRoles,
+} from '../../services/user-services/user.services'
+import { requiresAuthentication } from '../../middleware/requireAuth'
+import { requiresInvite } from '../../middleware/requireInvite'
+import { invalidateInvite } from '../../services/user-services/registration.services'
+import { logger } from '../../logger'
+import { verify } from 'jsonwebtoken'
+import { TUserResource } from '../../types/user.types'
+import { Role } from '../../types/permission.types'
+import { hasPermission } from '../../middleware/requirePermission'
 
-export const userRouter = Router();
+export const userRouter = Router()
 
 /**
  * @swagger
@@ -45,45 +45,44 @@ export const userRouter = Router();
  *         description: Not authorized to view users
  */
 userRouter.get(
-  "/getAll",
+  '/getAll',
   requiresAuthentication,
-  hasPermission("users"),
+  hasPermission('users'),
   catchAsync(async (req, res) => {
-
-    return res.status(200).json(await getAllUsers());
+    return res.status(200).json(await getAllUsers())
   }),
-);
+)
 
 userRouter.post(
-  "/",
+  '/',
   requiresInvite,
-  body("email")
+  body('email')
     .exists()
-    .withMessage("email is required")
+    .withMessage('email is required')
     .isString()
     .isEmail()
-    .withMessage("should be a valid email"),
-  body("username")
+    .withMessage('should be a valid email'),
+  body('username')
     .exists()
-    .withMessage("Username is required")
+    .withMessage('Username is required')
     .isString()
     .isLength({ min: 2, max: 30 })
-    .withMessage("should be a valid Username"),
-  body("password")
+    .withMessage('should be a valid Username'),
+  body('password')
     .exists()
-    .withMessage("password is required")
+    .withMessage('password is required')
     .isString()
-    .withMessage("password must be string")
+    .withMessage('password must be string')
     .isStrongPassword()
-    .withMessage("should be strong password"),
-  body("admin").isBoolean().optional().default(false),
+    .withMessage('should be strong password'),
+  body('admin').isBoolean().optional().default(false),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { email, password, username } = matchedData(req);
+    const { email, password, username } = matchedData(req)
 
     try {
       const created = await createUser({
@@ -91,15 +90,15 @@ userRouter.post(
         password,
         userName: username,
         admin: false,
-      });
-      logger.debug("Invite token used", req.inviteToken);
-      await invalidateInvite(req.inviteToken!);
-      res.status(201).json(created);
+      })
+      logger.debug('Invite token used', req.inviteToken)
+      await invalidateInvite(req.inviteToken!)
+      res.status(201).json(created)
     } catch (err) {
-      throw err;
+      throw err
     }
   }),
-);
+)
 
 /**
  * @swagger
@@ -125,35 +124,35 @@ userRouter.post(
  *         description: Not authorized or cannot delete own account
  */
 userRouter.delete(
-  "/:id",
+  '/:id',
   requiresAuthentication,
-  param("id")
+  param('id')
     .isMongoId()
-    .withMessage("url parameter id is required and must be valid id"),
+    .withMessage('url parameter id is required and must be valid id'),
   catchAsync(async (req, res) => {
-    const user = await getUser(req.userId!);
+    const user = await getUser(req.userId!)
     if (!user.admin) {
-      throw new HttpError(403);
+      throw new HttpError(403)
     }
 
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { id } = matchedData(req);
+    const { id } = matchedData(req)
     if (req.userId === id) {
-      throw new HttpError(403, "Cannot delete own account");
+      throw new HttpError(403, 'Cannot delete own account')
     }
 
-    const deletedUser = await deleteUser(id);
+    const deletedUser = await deleteUser(id)
     if (!deletedUser) {
-      throw new HttpError(400, "Something went wrong");
+      throw new HttpError(400, 'Something went wrong')
     }
 
-    res.status(200).end();
+    res.status(200).end()
   }),
-);
+)
 
 /**
  * @swagger
@@ -185,41 +184,38 @@ userRouter.delete(
  *         description: Not authorized to update this user
  */
 userRouter.put(
-  "/:id",
+  '/:id',
   requiresAuthentication,
-  param("id").isMongoId(),
-  body("userName").optional().isString().isLength({ min: 2, max: 50 }),
-  body("email").optional().isEmail().isLength({ min: 2, max: 75 }),
+  param('id').isMongoId(),
+  body('userName').optional().isString().isLength({ min: 2, max: 50 }),
+  body('email').optional().isEmail().isLength({ min: 2, max: 75 }),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
-    const { id } = req.params;
-    const validatedData = matchedData(req, { locations: ["body", "params"] });
+    const { id } = req.params
+    const validatedData = matchedData(req, { locations: ['body', 'params'] })
     if (validatedData.id !== id) {
-      throw new HttpError(
-        403,
-        "You do not have permission to update this user",
-      );
+      throw new HttpError(403, 'You do not have permission to update this user')
     }
 
     const updatedUser = await updateUser(
       validatedData.id,
       validatedData.userName,
       validatedData.email,
-    );
+    )
 
     if (!updatedUser) {
       throw new HttpError(
         400,
-        "Something went wrong, user could not be updated",
-      );
+        'Something went wrong, user could not be updated',
+      )
     }
 
-    res.sendStatus(200).end();
+    res.sendStatus(200).end()
   }),
-);
+)
 
 /**
  * @swagger
@@ -244,25 +240,25 @@ userRouter.put(
  *         description: Invalid current password
  */
 userRouter.post(
-  "/change-password",
+  '/change-password',
   requiresAuthentication,
-  body("currentPassword").exists(),
-  body("newPassword")
+  body('currentPassword').exists(),
+  body('newPassword')
     .exists()
     .isStrongPassword()
-    .withMessage("Please use a strong password"),
+    .withMessage('Please use a strong password'),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
 
-    const { currentPassword, newPassword } = matchedData(req);
-    await changePassword(req.userId!, newPassword, currentPassword);
-    res.clearCookie("access_token");
-    res.sendStatus(200).end();
+    const { currentPassword, newPassword } = matchedData(req)
+    await changePassword(req.userId!, newPassword, currentPassword)
+    res.clearCookie('access_token')
+    res.sendStatus(200).end()
   }),
-);
+)
 
 /**
  * @swagger
@@ -284,12 +280,12 @@ userRouter.post(
  *                 enum: ['users', 'collections', 'invites']
  */
 userRouter.get(
-  "/roles",
+  '/roles',
   requiresAuthentication,
   catchAsync(async (req, res) => {
-    return res.status(200).json(Object.values(Role));
+    return res.status(200).json(Object.values(Role))
   }),
-);
+)
 
 /**
  * @swagger
@@ -327,51 +323,46 @@ userRouter.get(
  *         description: User not found
  */
 userRouter.put(
-  "/:userId/roles",
+  '/:userId/roles',
   requiresAuthentication,
-  hasPermission("users"),
-  param("userId")
-    .isMongoId()
-    .withMessage("userId must be a valid MongoDB id"),
-  body("roles")
+  hasPermission('users'),
+  param('userId').isMongoId().withMessage('userId must be a valid MongoDB id'),
+  body('roles')
     .exists()
-    .withMessage("roles is required")
+    .withMessage('roles is required')
     .isArray()
-    .withMessage("roles must be an array")
+    .withMessage('roles must be an array')
     .custom((roles) => {
       // Ensure every role in the array is a valid role
-      const validRoles = Object.values(Role);
-      return roles.every((role: Role) => validRoles.includes(role));
+      const validRoles = Object.values(Role)
+      return roles.every((role: Role) => validRoles.includes(role))
     })
-    .withMessage("Invalid roles provided"),
+    .withMessage('Invalid roles provided'),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { userId } = matchedData(req, { locations: ['params'] });
-    const { roles } = matchedData(req, { locations: ['body'] });
+    const { userId } = matchedData(req, { locations: ['params'] })
+    const { roles } = matchedData(req, { locations: ['body'] })
 
-    const requestingUser = await getUser(req.userId!);
-    const targetUser = await getUser(userId);
+    const requestingUser = await getUser(req.userId!)
+    const targetUser = await getUser(userId)
 
     if (!targetUser) {
-      throw new HttpError(404, "Target user not found");
+      throw new HttpError(404, 'Target user not found')
     }
 
     if (userId === req.userId) {
-      throw new HttpError(403, "Cannot modify own roles");
+      throw new HttpError(403, 'Cannot modify own roles')
     }
 
-    if (
-      !requestingUser.admin && 
-      targetUser.admin
-    ) {
-      throw new HttpError(403, "Cannot modify admin user roles");
+    if (!requestingUser.admin && targetUser.admin) {
+      throw new HttpError(403, 'Cannot modify admin user roles')
     }
 
-    const updatedUser = await assignRoles(userId, roles);
-    res.status(200).json(updatedUser);
+    const updatedUser = await assignRoles(userId, roles)
+    res.status(200).json(updatedUser)
   }),
-);
+)

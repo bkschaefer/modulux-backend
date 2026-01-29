@@ -1,34 +1,34 @@
-import { validator } from "@exodus/schemasafe";
+import { validator } from '@exodus/schemasafe'
 
 export const schemaValidator = validator(
   {
-    $schema: "https://json-schema.org/draft/2020-12/schema",
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
     definitions: {
       IField: {
-        type: "object",
+        type: 'object',
         properties: {
-          name: { type: "string" },
-          label: { type: "string" },
+          name: { type: 'string' },
+          label: { type: 'string' },
           settings: {
-            type: "object",
+            type: 'object',
             properties: {
               dataTable: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  visible: { type: "boolean" },
-                  columnWidth: { type: "number" },
+                  visible: { type: 'boolean' },
+                  columnWidth: { type: 'number' },
                 },
                 additionalProperties: false,
               },
               upload: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  maxSize: { type: "number" },
+                  maxSize: { type: 'number' },
                   allowedTypes: {
-                    type: "array",
-                    items: { type: "string" },
+                    type: 'array',
+                    items: { type: 'string' },
                   },
-                  maxFiles: { type: "number" },
+                  maxFiles: { type: 'number' },
                 },
                 additionalProperties: false,
               },
@@ -36,35 +36,35 @@ export const schemaValidator = validator(
             additionalProperties: false,
           },
           fieldType: {
-            type: "string",
+            type: 'string',
             enum: [
-              "TextField",
-              "NumberField",
-              "BooleanField",
-              "OptionField",
-              "FieldArray",
-              "CompositeField",
-              "ImageField",
-              "RichTextField",
+              'TextField',
+              'NumberField',
+              'BooleanField',
+              'OptionField',
+              'FieldArray',
+              'CompositeField',
+              'ImageField',
+              'RichTextField',
             ],
           },
-          required: { type: "boolean" },
-          readOnly: { type: "boolean" },
+          required: { type: 'boolean' },
+          readOnly: { type: 'boolean' },
         },
-        required: ["name", "label", "fieldType"],
+        required: ['name', 'label', 'fieldType'],
       },
       ITextField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "TextField" },
-              defaultValue: { type: "string" },
-              pattern: { type: "string" },
-              maxLength: { type: "integer" },
-              minLength: { type: "integer" },
+              fieldType: { const: 'TextField' },
+              defaultValue: { type: 'string' },
+              pattern: { type: 'string' },
+              maxLength: { type: 'integer' },
+              minLength: { type: 'integer' },
             },
           },
         ],
@@ -72,14 +72,14 @@ export const schemaValidator = validator(
       INumberField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "NumberField" },
-              defaultValue: { type: "number" },
-              min: { type: "number" },
-              max: { type: "number" },
+              fieldType: { const: 'NumberField' },
+              defaultValue: { type: 'number' },
+              min: { type: 'number' },
+              max: { type: 'number' },
             },
           },
         ],
@@ -87,12 +87,12 @@ export const schemaValidator = validator(
       IBooleanField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "BooleanField" },
-              defaultValue: { type: "boolean" },
+              fieldType: { const: 'BooleanField' },
+              defaultValue: { type: 'boolean' },
             },
           },
         ],
@@ -100,64 +100,64 @@ export const schemaValidator = validator(
       IOptionField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "OptionField" },
+              fieldType: { const: 'OptionField' },
               options: {
-                type: "array",
-                items: { type: "string" },
+                type: 'array',
+                items: { type: 'string' },
               },
-              defaultSelected: { type: "integer" },
+              defaultSelected: { type: 'integer' },
             },
-            required: ["options"],
+            required: ['options'],
           },
         ],
       },
       ICompositeField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "CompositeField" },
+              fieldType: { const: 'CompositeField' },
               fields: {
-                type: "array",
+                type: 'array',
                 items: {
                   oneOf: [
-                    { $ref: "#/definitions/ITextField" },
-                    { $ref: "#/definitions/INumberField" },
-                    { $ref: "#/definitions/IBooleanField" },
-                    { $ref: "#/definitions/IOptionField" },
-                    { $ref: "#/definitions/IImageField" },
-                    { $ref: "#/definitions/IRichTextField" },
+                    { $ref: '#/definitions/ITextField' },
+                    { $ref: '#/definitions/INumberField' },
+                    { $ref: '#/definitions/IBooleanField' },
+                    { $ref: '#/definitions/IOptionField' },
+                    { $ref: '#/definitions/IImageField' },
+                    { $ref: '#/definitions/IRichTextField' },
                   ],
                 },
               },
             },
-            required: ["fields"],
+            required: ['fields'],
           },
         ],
       },
       IFieldArray: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "FieldArray" },
+              fieldType: { const: 'FieldArray' },
               field: {
                 oneOf: [
-                  { $ref: "#/definitions/ITextField" },
-                  { $ref: "#/definitions/INumberField" },
-                  { $ref: "#/definitions/IBooleanField" },
-                  { $ref: "#/definitions/IOptionField" },
-                  { $ref: "#/definitions/ICompositeField" },
-                  { $ref: "#/definitions/IImageField" },
-                  { $ref: "#/definitions/IRichTextField" },
+                  { $ref: '#/definitions/ITextField' },
+                  { $ref: '#/definitions/INumberField' },
+                  { $ref: '#/definitions/IBooleanField' },
+                  { $ref: '#/definitions/IOptionField' },
+                  { $ref: '#/definitions/ICompositeField' },
+                  { $ref: '#/definitions/IImageField' },
+                  { $ref: '#/definitions/IRichTextField' },
                 ],
               },
             },
@@ -168,45 +168,45 @@ export const schemaValidator = validator(
       IImageField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "ImageField" },
+              fieldType: { const: 'ImageField' },
               //defaultValue: { type: "string" },
-              minLength: { type: "integer" },
-              maxLength: { type: "integer" },
+              minLength: { type: 'integer' },
+              maxLength: { type: 'integer' },
             },
           },
-        ]
+        ],
       },
       IRichTextField: {
         unevaluatedProperties: false,
         allOf: [
-          { $ref: "#/definitions/IField" },
+          { $ref: '#/definitions/IField' },
           {
-            type: "object",
+            type: 'object',
             properties: {
-              fieldType: { const: "RichTextField" },
+              fieldType: { const: 'RichTextField' },
               //defaultValue: { type: "string" },
             },
           },
-        ]
-      }
+        ],
+      },
     },
-    type: "object",
+    type: 'object',
     properties: {
-      title: { type: "string" },
-      name: { type: "string" },
-      description: { type: "string" },
-      creator: { type: "string" },
+      title: { type: 'string' },
+      name: { type: 'string' },
+      description: { type: 'string' },
+      creator: { type: 'string' },
       settings: {
-        type: "object",
+        type: 'object',
         properties: {
           dataTable: {
-            type: "object",
+            type: 'object',
             properties: {
-              entriesPerPage: { type: "integer" },
+              entriesPerPage: { type: 'integer' },
             },
             additionalProperties: false,
           },
@@ -214,24 +214,24 @@ export const schemaValidator = validator(
         additionalProperties: false,
       },
       fields: {
-        type: "array",
+        type: 'array',
         minItems: 0,
         items: {
           oneOf: [
-            { $ref: "#/definitions/ITextField" },
-            { $ref: "#/definitions/INumberField" },
-            { $ref: "#/definitions/IBooleanField" },
-            { $ref: "#/definitions/IOptionField" },
-            { $ref: "#/definitions/ICompositeField" },
-            { $ref: "#/definitions/IFieldArray" },
-            { $ref: "#/definitions/IRichTextField" },
-            { $ref: "#/definitions/IImageField" },
+            { $ref: '#/definitions/ITextField' },
+            { $ref: '#/definitions/INumberField' },
+            { $ref: '#/definitions/IBooleanField' },
+            { $ref: '#/definitions/IOptionField' },
+            { $ref: '#/definitions/ICompositeField' },
+            { $ref: '#/definitions/IFieldArray' },
+            { $ref: '#/definitions/IRichTextField' },
+            { $ref: '#/definitions/IImageField' },
           ],
         },
       },
     },
-    required: ["name", "fields"],
+    required: ['name', 'fields'],
     additionalProperties: false,
   },
   { includeErrors: true, allErrors: true },
-);
+)

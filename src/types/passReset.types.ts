@@ -1,21 +1,21 @@
-import type { Model } from "mongoose";
+import type { Model } from 'mongoose'
 
 export interface IPassResetSchema {
-  userID: string;
-  resetToken: string;
-  expireDate: Date;
-  isUsed: boolean;
+  userID: string
+  resetToken: string
+  expireDate: Date
+  isUsed: boolean
 }
 
 export type TPassResetResorce = Pick<
   IPassResetSchema,
-  "userID" | "resetToken" | "expireDate" | "isUsed"
+  'userID' | 'resetToken' | 'expireDate' | 'isUsed'
 > & {
-  id: string;
-};
-
-export interface IPassResetMethods {
-  toResourceObject(): TPassResetResorce;
+  id: string
 }
 
-export type TPassResetModel = Model<IPassResetSchema, {}, IPassResetMethods>;
+export interface IPassResetMethods {
+  toResourceObject(): TPassResetResorce
+}
+
+export type TPassResetModel = Model<IPassResetSchema, {}, IPassResetMethods>

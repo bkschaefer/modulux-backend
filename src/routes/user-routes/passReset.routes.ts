@@ -1,14 +1,14 @@
-import { Router } from "express";
-import { catchAsync } from "../../helper/catchAsync";
+import { Router } from 'express'
+import { catchAsync } from '../../helper/catchAsync'
 import {
   changePassForgotten,
   checkPassResetToken,
   createPassReset,
-} from "../../services/user-services/passReset.services";
-import { HttpError, HttpError400 } from "../../errors/HttpError";
-import { body, matchedData, param, validationResult } from "express-validator";
+} from '../../services/user-services/passReset.services'
+import { HttpError, HttpError400 } from '../../errors/HttpError'
+import { body, matchedData, param, validationResult } from 'express-validator'
 
-export const passResetRouter = Router();
+export const passResetRouter = Router()
 
 /**
  * @swagger
@@ -41,25 +41,25 @@ export const passResetRouter = Router();
  *         description: Token not found or invalid
  */
 passResetRouter.get(
-  "/verify-reset-token/:token",
-  param("token").isUUID(),
+  '/verify-reset-token/:token',
+  param('token').isUUID(),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { token } = matchedData(req);
+    const { token } = matchedData(req)
     if (!token) {
-      throw new HttpError(400, "Token is required");
+      throw new HttpError(400, 'Token is required')
     }
-    const isValid = await checkPassResetToken(token);
+    const isValid = await checkPassResetToken(token)
     if (!isValid) {
-      throw new HttpError(404, "Token is not valid");
+      throw new HttpError(404, 'Token is not valid')
     }
-    res.status(200).json({ isValid });
+    res.status(200).json({ isValid })
   }),
-);
+)
 
 /**
  * @swagger
@@ -90,27 +90,27 @@ passResetRouter.get(
  *         description: User not found
  */
 passResetRouter.post(
-  "/request-password-reset",
-  body("userNameOrEmail").isString().isLength({ min: 3, max: 36 }),
+  '/request-password-reset',
+  body('userNameOrEmail').isString().isLength({ min: 3, max: 36 }),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { userNameOrEmail } = matchedData(req);
+    const { userNameOrEmail } = matchedData(req)
     if (!userNameOrEmail) {
-      throw new HttpError(400, "Username or email is required");
+      throw new HttpError(400, 'Username or email is required')
     }
-    const resetEntry = await createPassReset(userNameOrEmail);
+    const resetEntry = await createPassReset(userNameOrEmail)
     if (!resetEntry) {
-      throw new HttpError(404, "Creator not found");
+      throw new HttpError(404, 'Creator not found')
     }
     res
       .status(201)
-      .json({ message: "Password reset link sent.", data: resetEntry });
+      .json({ message: 'Password reset link sent.', data: resetEntry })
   }),
-);
+)
 
 /**
  * @swagger
@@ -142,23 +142,23 @@ passResetRouter.post(
  *               $ref: '#/components/schemas/Error'
  */
 passResetRouter.post(
-  "/reset-password",
-  body("token").isUUID(),
-  body("newPassword").isString().isLength({ min: 5, max: 50 }),
+  '/reset-password',
+  body('token').isUUID(),
+  body('newPassword').isString().isLength({ min: 5, max: 50 }),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { token, newPassword } = matchedData(req);
+    const { token, newPassword } = matchedData(req)
     if (!token || !newPassword) {
-      throw new HttpError(400, "Token and new password are required");
+      throw new HttpError(400, 'Token and new password are required')
     }
-    const change = await changePassForgotten(token, newPassword);
+    const change = await changePassForgotten(token, newPassword)
     if (!change) {
-      throw new HttpError(400, "It was not possible to change the password.");
+      throw new HttpError(400, 'It was not possible to change the password.')
     }
-    res.status(200).json({ message: "Password has been reset successfully." });
+    res.status(200).json({ message: 'Password has been reset successfully.' })
   }),
-);
+)

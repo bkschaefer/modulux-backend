@@ -83,8 +83,8 @@ export class HttpError extends Error {
 }
 
 type TCustomValidationError = {
-  path: string,
-  msg: string,
+  path: string
+  msg: string
 }
 
 type TValidationError = TCustomValidationError | ValidationError

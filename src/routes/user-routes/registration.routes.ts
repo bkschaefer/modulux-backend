@@ -1,16 +1,16 @@
-import { Router } from "express";
-import { body, matchedData, param, validationResult } from "express-validator";
-import { catchAsync } from "../../helper/catchAsync";
+import { Router } from 'express'
+import { body, matchedData, param, validationResult } from 'express-validator'
+import { catchAsync } from '../../helper/catchAsync'
 import {
   verifyInvite,
   createInvite,
-} from "../../services/user-services/registration.services";
-import { HttpError, HttpError400 } from "../../errors/HttpError";
-import { requiresAuthentication } from "../../middleware/requireAuth";
-import { getUser } from "../../services/user-services/user.services";
-import { hasPermission } from "../../middleware/requirePermission";
+} from '../../services/user-services/registration.services'
+import { HttpError, HttpError400 } from '../../errors/HttpError'
+import { requiresAuthentication } from '../../middleware/requireAuth'
+import { getUser } from '../../services/user-services/user.services'
+import { hasPermission } from '../../middleware/requirePermission'
 
-export const registrationRouter = Router();
+export const registrationRouter = Router()
 
 /**
  * @swagger
@@ -43,25 +43,25 @@ export const registrationRouter = Router();
  *         description: Invite not found or invalid
  */
 registrationRouter.get(
-  "/registration/:token",
-  param("token").isUUID(),
+  '/registration/:token',
+  param('token').isUUID(),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
-    const { token } = matchedData(req);
+    const { token } = matchedData(req)
     if (!token) {
-      throw new HttpError(400, "token is required");
+      throw new HttpError(400, 'token is required')
     }
-    const invite = await verifyInvite(token);
+    const invite = await verifyInvite(token)
     if (!invite) {
-      throw new HttpError(404, "Invite not found or invalid");
+      throw new HttpError(404, 'Invite not found or invalid')
     }
-    return res.status(200).json(invite);
+    return res.status(200).json(invite)
   }),
-);
+)
 
 /**
  * @swagger
@@ -96,32 +96,31 @@ registrationRouter.get(
  *         description: Creator not found
  */
 registrationRouter.post(
-  "/registration/",
+  '/registration/',
   requiresAuthentication,
-  hasPermission("invites"),
-  body("email").isString().isEmail().withMessage("Valid email is required."),
-  body("id").isMongoId().withMessage("Valid user ID is required."),
+  hasPermission('invites'),
+  body('email').isString().isEmail().withMessage('Valid email is required.'),
+  body('id').isMongoId().withMessage('Valid user ID is required.'),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
-    const { email, id } = matchedData(req);
+    const { email, id } = matchedData(req)
 
     if (id !== req.userId) {
-      throw new HttpError(403, "User ID mismatch.");
+      throw new HttpError(403, 'User ID mismatch.')
     }
 
-    const creator = await getUser(id);
+    const creator = await getUser(id)
     if (!creator) {
-      throw new HttpError(404, "Creator not found");
+      throw new HttpError(404, 'Creator not found')
     }
     if (!creator.admin) {
-      throw new HttpError(403, "Only admins can create invites");
+      throw new HttpError(403, 'Only admins can create invites')
     }
 
-    const invite = await createInvite(email, creator.userName);
-    return res.status(201).json(invite);
+    const invite = await createInvite(email, creator.userName)
+    return res.status(201).json(invite)
   }),
-);
-
+)

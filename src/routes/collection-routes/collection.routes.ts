@@ -1,19 +1,25 @@
-import { Router } from "express";
-import {  matchedData, param, validationResult } from "express-validator";
-import { requiresAuthentication } from "../../middleware/requireAuth";
-import { hasPermission } from "../../middleware/requirePermission";
-import { catchAsync } from "../../helper/catchAsync";
-import { HttpError400} from "../../errors/HttpError";
-import { validateSchema } from "../../middleware/validateSchema";
-import { createCollection, getCollection, getAllCollectionNames, updateCollection, deleteCollection } from "../../services/collection-services/collection.services";
-import { collectionSchemaRouter } from "./collection.schema.routes";
-import { collectionEntryRouter } from "./collection.entry.routes";
-import { logger } from "../../logger";
+import { Router } from 'express'
+import { matchedData, param, validationResult } from 'express-validator'
+import { requiresAuthentication } from '../../middleware/requireAuth'
+import { hasPermission } from '../../middleware/requirePermission'
+import { catchAsync } from '../../helper/catchAsync'
+import { HttpError400 } from '../../errors/HttpError'
+import { validateSchema } from '../../middleware/validateSchema'
+import {
+  createCollection,
+  getCollection,
+  getAllCollectionNames,
+  updateCollection,
+  deleteCollection,
+} from '../../services/collection-services/collection.services'
+import { collectionSchemaRouter } from './collection.schema.routes'
+import { collectionEntryRouter } from './collection.entry.routes'
+import { logger } from '../../logger'
 
-export const collectionRouter = Router();
+export const collectionRouter = Router()
 
-collectionRouter.use("/:collectionName/schema", collectionSchemaRouter)
-collectionRouter.use("/:collectionName/entry", collectionEntryRouter)
+collectionRouter.use('/:collectionName/schema', collectionSchemaRouter)
+collectionRouter.use('/:collectionName/entry', collectionEntryRouter)
 
 /**
  * @swagger
@@ -41,12 +47,12 @@ collectionRouter.use("/:collectionName/entry", collectionEntryRouter)
  *         description: Unauthorized
  */
 collectionRouter.get(
-  "/all",
+  '/all',
   requiresAuthentication,
   catchAsync(async (req, res) => {
-    res.status(200).json(await getAllCollectionNames());
+    res.status(200).json(await getAllCollectionNames())
   }),
-);
+)
 
 /**
  * @swagger
@@ -74,13 +80,15 @@ collectionRouter.get(
  *       401:
  *         description: Unauthorized
  */
-collectionRouter.post('/',
+collectionRouter.post(
+  '/',
   requiresAuthentication,
   validateSchema,
-  hasPermission("schemas"),
+  hasPermission('schemas'),
   catchAsync(async (req, res) => {
     res.status(201).json(await createCollection(req.body))
-  }))
+  }),
+)
 
 /**
  * @swagger
@@ -110,26 +118,26 @@ collectionRouter.post('/',
  *         description: Unauthorized
  */
 collectionRouter.get(
-  "/:collectionName",
+  '/:collectionName',
   requiresAuthentication,
-  hasPermission("collections"),
-  param("collectionName")
+  hasPermission('collections'),
+  param('collectionName')
     .exists()
-    .withMessage("Collection name is required")
+    .withMessage('Collection name is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("Collection name must be a valid string"),
+    .withMessage('Collection name must be a valid string'),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
 
-    const { collectionName } = matchedData(req, { locations: ["params"] });
-    logger.info(`Retrieving collection ${collectionName}`);
-    res.status(200).json(await getCollection(collectionName));
+    const { collectionName } = matchedData(req, { locations: ['params'] })
+    logger.info(`Retrieving collection ${collectionName}`)
+    res.status(200).json(await getCollection(collectionName))
   }),
-);
+)
 
 /**
  * @swagger
@@ -165,31 +173,28 @@ collectionRouter.get(
  *         description: Unauthorized
  */
 collectionRouter.put(
-  "/:collectionName",
+  '/:collectionName',
   requiresAuthentication,
-  hasPermission("schemas"),
+  hasPermission('schemas'),
   validateSchema,
-  param("collectionName")
+  param('collectionName')
     .exists()
-    .withMessage("collectionName is required")
+    .withMessage('collectionName is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("collectionName must be a valid string"),
+    .withMessage('collectionName must be a valid string'),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
     const { collectionName } = matchedData(req, {
-      locations: ["params"],
-    });
+      locations: ['params'],
+    })
 
-    res.status(200).json(await updateCollection(
-      collectionName,
-      req.body
-    ));
+    res.status(200).json(await updateCollection(collectionName, req.body))
   }),
-);
+)
 
 /**
  * @swagger
@@ -215,26 +220,26 @@ collectionRouter.put(
  *         description: Unauthorized
  */
 collectionRouter.delete(
-  "/:collectionName",
+  '/:collectionName',
   requiresAuthentication,
-  hasPermission("schemas"),
-  param("collectionName")
+  hasPermission('schemas'),
+  param('collectionName')
     .exists()
-    .withMessage("collectionName is required")
+    .withMessage('collectionName is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("collectionName must be a valid string"),
+    .withMessage('collectionName must be a valid string'),
   catchAsync(async (req, res) => {
-    const result = validationResult(req);
+    const result = validationResult(req)
     if (!result.isEmpty()) {
-      throw new HttpError400(result.array());
+      throw new HttpError400(result.array())
     }
 
     const { collectionName } = matchedData(req, {
-      locations: ["params"],
-    });
+      locations: ['params'],
+    })
 
-    await deleteCollection(collectionName);
-    res.sendStatus(204);
+    await deleteCollection(collectionName)
+    res.sendStatus(204)
   }),
-);
+)

@@ -1,11 +1,11 @@
-import { model, Schema } from "mongoose";
+import { model, Schema } from 'mongoose'
 import {
   IInviteMethods,
   IInviteSchema,
   TInviteModel,
-} from "../types/invite.types";
+} from '../types/invite.types'
 
-export const InviteModelName = "sys_Invite";
+export const InviteModelName = 'sys_Invite'
 
 const schema = new Schema<IInviteSchema, TInviteModel, IInviteMethods>(
   {
@@ -24,7 +24,7 @@ const schema = new Schema<IInviteSchema, TInviteModel, IInviteMethods>(
       required: true,
     },
     isUsed: {
-        type: Boolean,
+      type: Boolean,
       default: false,
       required: true,
     },
@@ -32,15 +32,15 @@ const schema = new Schema<IInviteSchema, TInviteModel, IInviteMethods>(
   {
     timestamps: true,
   },
-);
+)
 
-schema.method("toResourceObject", function toResourceObject() {
+schema.method('toResourceObject', function toResourceObject() {
   return {
     email: this.email,
     inviteToken: this.inviteToken,
     expireDate: this.expireDate,
     isUsed: this.isUsed,
-  };
-});
+  }
+})
 
-export const InviteModel = model(InviteModelName, schema);
+export const InviteModel = model(InviteModelName, schema)

@@ -1,21 +1,18 @@
-import { Router } from "express";
-import { body, matchedData, param, validationResult } from "express-validator";
-import { requiresAuthentication } from "../../middleware/requireAuth";
-import { hasPermission } from "../../middleware/requirePermission";
-import { catchAsync } from "../../helper/catchAsync";
-import { HttpError400 } from "../../errors/HttpError";
+import { Router } from 'express'
+import { body, matchedData, param, validationResult } from 'express-validator'
+import { requiresAuthentication } from '../../middleware/requireAuth'
+import { hasPermission } from '../../middleware/requirePermission'
+import { catchAsync } from '../../helper/catchAsync'
+import { HttpError400 } from '../../errors/HttpError'
 import {
   getCollectionEntry,
   addEntryToCollection,
   updateCollectionEntry,
   deleteEntriesFromCollection,
-} from "../../services/collection-services/collection.entry.services";
-import {
-  parseRequestBody,
-  upload,
-} from "../../middleware/dataStorage";
+} from '../../services/collection-services/collection.entry.services'
+import { parseRequestBody, upload } from '../../middleware/dataStorage'
 
-export const collectionEntryRouter = Router({ mergeParams: true });
+export const collectionEntryRouter = Router({ mergeParams: true })
 
 /**
  * @swagger
@@ -54,27 +51,27 @@ export const collectionEntryRouter = Router({ mergeParams: true });
  *         description: Insufficient permissions
  */
 collectionEntryRouter.post(
-  "/",
+  '/',
   requiresAuthentication,
-  hasPermission("collections"),
-  param("collectionName")
+  hasPermission('collections'),
+  param('collectionName')
     .exists()
-    .withMessage("Collection name is required")
+    .withMessage('Collection name is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("Collection name must be a valid string"),
-  upload.any(), 
+    .withMessage('Collection name must be a valid string'),
+  upload.any(),
   parseRequestBody,
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
 
-    const { collectionName } = matchedData(req, { locations: ["params"] });
-    res.status(201).json(addEntryToCollection(collectionName, req.body));
+    const { collectionName } = matchedData(req, { locations: ['params'] })
+    res.status(201).json(addEntryToCollection(collectionName, req.body))
   }),
-);
+)
 
 /**
  * @swagger
@@ -115,31 +112,31 @@ collectionEntryRouter.post(
  *         description: Entry not found
  */
 collectionEntryRouter.get(
-  "/:entryId",
+  '/:entryId',
   requiresAuthentication,
-  hasPermission("collections"),
-  param("collectionName")
+  hasPermission('collections'),
+  param('collectionName')
     .exists()
-    .withMessage("Collection name is required")
+    .withMessage('Collection name is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("Collection name must be a valid string"),
-  param("entryId")
+    .withMessage('Collection name must be a valid string'),
+  param('entryId')
     .exists()
     .isMongoId()
-    .withMessage("Entry ID must be a valid MongoDB ID"),
+    .withMessage('Entry ID must be a valid MongoDB ID'),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
-    
+
     const { collectionName, entryId } = matchedData(req, {
-      locations: ["params"],
-    });
-    res.status(200).json(await getCollectionEntry(collectionName, entryId));
+      locations: ['params'],
+    })
+    res.status(200).json(await getCollectionEntry(collectionName, entryId))
   }),
-);
+)
 
 /**
  * @swagger
@@ -187,35 +184,35 @@ collectionEntryRouter.get(
  *         description: Entry not found
  */
 collectionEntryRouter.put(
-  "/:entryId",
-  param("collectionName")
+  '/:entryId',
+  param('collectionName')
     .exists()
-    .withMessage("Collection name is required")
+    .withMessage('Collection name is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("Collection name must be a valid string"),
-  param("entryId")
+    .withMessage('Collection name must be a valid string'),
+  param('entryId')
     .exists()
     .isMongoId()
-    .withMessage("entryName must be a valid mongoId"),
+    .withMessage('entryName must be a valid mongoId'),
   requiresAuthentication,
-  hasPermission("collections"),
+  hasPermission('collections'),
   upload.any(),
   parseRequestBody,
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
 
     const { collectionName, entryId } = matchedData(req, {
-      locations: ["params"],
-    });
+      locations: ['params'],
+    })
     res
       .status(200)
-      .json(await updateCollectionEntry(collectionName, entryId, req.body));
+      .json(await updateCollectionEntry(collectionName, entryId, req.body))
   }),
-);
+)
 
 /**
  * @swagger
@@ -258,33 +255,33 @@ collectionEntryRouter.put(
  *         description: Insufficient permissions
  */
 collectionEntryRouter.delete(
-  "/",
+  '/',
   requiresAuthentication,
-  hasPermission("collections"),
-  param("collectionName")
+  hasPermission('collections'),
+  param('collectionName')
     .exists()
-    .withMessage("Collection name is required")
+    .withMessage('Collection name is required')
     .isString()
     .isLength({ min: 2, max: 50 })
-    .withMessage("Collection name must be a valid string"),
-  body("entryIds")
+    .withMessage('Collection name must be a valid string'),
+  body('entryIds')
     .exists()
-    .withMessage("Entry IDs are required")
+    .withMessage('Entry IDs are required')
     .isArray({ min: 1 })
-    .withMessage("Entry IDs must be an array with at least one ID"),
-  body("entryIds.*")
+    .withMessage('Entry IDs must be an array with at least one ID'),
+  body('entryIds.*')
     .isMongoId()
-    .withMessage("Each entry ID must be a valid MongoDB ID"),
+    .withMessage('Each entry ID must be a valid MongoDB ID'),
   catchAsync(async (req, res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      throw new HttpError400(errors.array());
+      throw new HttpError400(errors.array())
     }
 
-    const { collectionName } = matchedData(req, { locations: ["params"] });
-    const { entryIds } = matchedData(req, { locations: ["body"] });
+    const { collectionName } = matchedData(req, { locations: ['params'] })
+    const { entryIds } = matchedData(req, { locations: ['body'] })
 
-    await deleteEntriesFromCollection(collectionName, entryIds);
-    res.sendStatus(204);
+    await deleteEntriesFromCollection(collectionName, entryIds)
+    res.sendStatus(204)
   }),
-);
+)

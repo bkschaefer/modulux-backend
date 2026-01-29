@@ -1,410 +1,410 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import swaggerJsdoc from 'swagger-jsdoc'
 
 const options: swaggerJsdoc.Options = {
   definition: {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      title: "Modulux CMS API Documentation",
-      version: "1.0.0",
-      description: "API documentation for the Modulux CMS backend service",
+      title: 'Modulux CMS API Documentation',
+      version: '1.0.0',
+      description: 'API documentation for the Modulux CMS backend service',
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Development server",
+        url: 'http://localhost:3000',
+        description: 'Development server',
       },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
         },
       },
       schemas: {
         Application: {
-          type: "object",
+          type: 'object',
           properties: {
             _id: {
-              type: "string",
-              format: "mongoId",
+              type: 'string',
+              format: 'mongoId',
             },
             url: {
-              type: "string",
-              format: "uri",
+              type: 'string',
+              format: 'uri',
             },
             name: {
-              type: "string",
+              type: 'string',
             },
             createdAt: {
-              type: "string",
-              format: "date-time",
+              type: 'string',
+              format: 'date-time',
             },
           },
         },
         AssignRolesRequest: {
-          type: "object",
-          required: ["roles"],
+          type: 'object',
+          required: ['roles'],
           properties: {
             roles: {
-              type: "array",
+              type: 'array',
               items: {
-                type: "string",
-                enum: ["users", "collections", "invites"],
+                type: 'string',
+                enum: ['users', 'collections', 'invites'],
               },
             },
           },
         },
         AuthLoginRequest: {
-          type: "object",
-          required: ["password"],
+          type: 'object',
+          required: ['password'],
           properties: {
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             userName: {
-              type: "string",
+              type: 'string',
             },
             password: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
             },
           },
         },
         AuthResponse: {
-          type: "object",
+          type: 'object',
           properties: {
             token: {
-              type: "string",
+              type: 'string',
             },
             user: {
-              $ref: "#/components/schemas/User",
+              $ref: '#/components/schemas/User',
             },
           },
         },
         ChangePasswordRequest: {
-          type: "object",
-          required: ["currentPassword", "newPassword"],
+          type: 'object',
+          required: ['currentPassword', 'newPassword'],
           properties: {
             currentPassword: {
-              type: "string",
+              type: 'string',
             },
             newPassword: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
             },
           },
         },
         CreateInviteRequest: {
-          type: "object",
-          required: ["email", "id"],
+          type: 'object',
+          required: ['email', 'id'],
           properties: {
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             id: {
-              type: "string",
-              format: "mongoId",
+              type: 'string',
+              format: 'mongoId',
             },
           },
         },
         Error: {
-          type: "object",
+          type: 'object',
           properties: {
             message: {
-              type: "string",
+              type: 'string',
             },
           },
         },
         InviteResponse: {
-          type: "object",
+          type: 'object',
           properties: {
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             token: {
-              type: "string",
-              format: "uuid",
+              type: 'string',
+              format: 'uuid',
             },
             createdBy: {
-              type: "string",
+              type: 'string',
             },
             expiresAt: {
-              type: "string",
-              format: "date-time",
+              type: 'string',
+              format: 'date-time',
             },
           },
         },
         LoginRequest: {
-          type: "object",
-          required: ["email", "password"],
+          type: 'object',
+          required: ['email', 'password'],
           properties: {
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             password: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
             },
           },
         },
         PasswordChangeRequest: {
-          type: "object",
-          required: ["token", "newPassword"],
+          type: 'object',
+          required: ['token', 'newPassword'],
           properties: {
             token: {
-              type: "string",
-              format: "uuid",
+              type: 'string',
+              format: 'uuid',
             },
             newPassword: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
               minLength: 5,
               maxLength: 50,
             },
           },
         },
         PasswordResetRequest: {
-          type: "object",
-          required: ["userNameOrEmail"],
+          type: 'object',
+          required: ['userNameOrEmail'],
           properties: {
             userNameOrEmail: {
-              type: "string",
+              type: 'string',
             },
           },
         },
         PasswordResetResponse: {
-          type: "object",
+          type: 'object',
           properties: {
             message: {
-              type: "string",
+              type: 'string',
             },
             data: {
-              type: "object",
+              type: 'object',
             },
           },
         },
         PasswordResetVerifyResponse: {
-          type: "object",
+          type: 'object',
           properties: {
             isValid: {
-              type: "boolean",
+              type: 'boolean',
             },
           },
         },
         RegisterRequest: {
-          type: "object",
-          required: ["email", "password"],
+          type: 'object',
+          required: ['email', 'password'],
           properties: {
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             password: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
             },
           },
         },
         UpdateUserRequest: {
-          type: "object",
+          type: 'object',
           properties: {
             userName: {
-              type: "string",
+              type: 'string',
               minLength: 2,
               maxLength: 50,
             },
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
               minLength: 2,
               maxLength: 75,
             },
           },
         },
         User: {
-          type: "object",
+          type: 'object',
           properties: {
             id: {
-              type: "string",
-              format: "uuid",
+              type: 'string',
+              format: 'uuid',
             },
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             password: {
-              type: "string",
-              format: "password",
+              type: 'string',
+              format: 'password',
             },
             createdAt: {
-              type: "string",
-              format: "date-time",
+              type: 'string',
+              format: 'date-time',
             },
             updatedAt: {
-              type: "string",
-              format: "date-time",
+              type: 'string',
+              format: 'date-time',
             },
           },
         },
         UserResponse: {
-          type: "object",
+          type: 'object',
           properties: {
             _id: {
-              type: "string",
-              format: "uuid",
+              type: 'string',
+              format: 'uuid',
             },
             email: {
-              type: "string",
-              format: "email",
+              type: 'string',
+              format: 'email',
             },
             userName: {
-              type: "string",
+              type: 'string',
             },
             admin: {
-              type: "boolean",
+              type: 'boolean',
             },
             roles: {
-              type: "array",
+              type: 'array',
               items: {
-                type: "string",
-                enum: ["users", "collections", "invites"],
+                type: 'string',
+                enum: ['users', 'collections', 'invites'],
               },
             },
             exp: {
-              type: "number",
+              type: 'number',
             },
           },
         },
         TCollectionResource: {
-          type: "object",
-          required: ["schema", "entries"],
+          type: 'object',
+          required: ['schema', 'entries'],
           properties: {
             schema: {
-              $ref: "#/components/schemas/TSchemaResource",
+              $ref: '#/components/schemas/TSchemaResource',
             },
             entries: {
-              type: "array",
+              type: 'array',
               items: {
-                $ref: "#/components/schemas/TEntryResource",
+                $ref: '#/components/schemas/TEntryResource',
               },
             },
           },
         },
         TEntryResource: {
-          type: "object",
+          type: 'object',
           properties: {
             _id: {
-              type: "string",
-              format: "mongoId",
-              description: "Unique identifier for the entry",
+              type: 'string',
+              format: 'mongoId',
+              description: 'Unique identifier for the entry',
             },
           },
           additionalProperties: true,
-          description: "Dynamic entry object with fields based on schema",
+          description: 'Dynamic entry object with fields based on schema',
         },
         TField: {
-          type: "object",
-          required: ["name", "label", "fieldType", "settings"],
+          type: 'object',
+          required: ['name', 'label', 'fieldType', 'settings'],
           properties: {
             name: {
-              type: "string",
-              description: "Field identifier",
+              type: 'string',
+              description: 'Field identifier',
             },
             label: {
-              type: "string",
-              description: "Display label for the field",
+              type: 'string',
+              description: 'Display label for the field',
             },
             fieldType: {
-              type: "string",
+              type: 'string',
               enum: [
-                "TextField",
-                "NumberField",
-                "BooleanField",
-                "OptionField",
-                "FieldArray",
-                "ImageField",
-                "CompositeField",
-                "RichTextField",
+                'TextField',
+                'NumberField',
+                'BooleanField',
+                'OptionField',
+                'FieldArray',
+                'ImageField',
+                'CompositeField',
+                'RichTextField',
               ],
             },
             settings: {
-              type: "object",
+              type: 'object',
               properties: {
                 dataTable: {
-                  type: "object",
+                  type: 'object',
                   properties: {
                     visible: {
-                      type: "boolean",
-                      description: "Whether the field is visible in data table",
+                      type: 'boolean',
+                      description: 'Whether the field is visible in data table',
                     },
                     columnWidth: {
-                      type: "number",
-                      description: "Width of the column in data table",
+                      type: 'number',
+                      description: 'Width of the column in data table',
                     },
                   },
                 },
               },
             },
             required: {
-              type: "boolean",
-              description: "Whether the field is required",
+              type: 'boolean',
+              description: 'Whether the field is required',
             },
           },
         },
         TImageObject: {
-          type: "object",
-          required: ["originalName", "key", "size"],
+          type: 'object',
+          required: ['originalName', 'key', 'size'],
           properties: {
             originalName: {
-              type: "string",
-              description: "Original filename of the image",
+              type: 'string',
+              description: 'Original filename of the image',
             },
             key: {
-              type: "string",
-              description: "Storage key of the image",
+              type: 'string',
+              description: 'Storage key of the image',
             },
             size: {
-              type: "number",
-              description: "Size of the image in bytes",
+              type: 'number',
+              description: 'Size of the image in bytes',
             },
           },
         },
         TSchemaResource: {
-          type: "object",
-          required: ["name", "title", "fields"],
+          type: 'object',
+          required: ['name', 'title', 'fields'],
           properties: {
             name: {
-              type: "string",
-              description: "Unique identifier for the collection",
+              type: 'string',
+              description: 'Unique identifier for the collection',
             },
             title: {
-              type: "string",
-              description: "Display title for the collection",
+              type: 'string',
+              description: 'Display title for the collection',
             },
             settings: {
-              type: "object",
+              type: 'object',
               properties: {
                 dataTable: {
-                  type: "object",
+                  type: 'object',
                   properties: {
                     entriesPerPage: {
-                      type: "number",
-                      description: "Number of entries to display per page",
+                      type: 'number',
+                      description: 'Number of entries to display per page',
                     },
                   },
                 },
               },
             },
             fields: {
-              type: "array",
+              type: 'array',
               items: {
-                $ref: "#/components/schemas/TField",
+                $ref: '#/components/schemas/TField',
               },
             },
           },
@@ -413,30 +413,30 @@ const options: swaggerJsdoc.Options = {
     },
     tags: [
       {
-        name: "Auth",
-        description: "Authentication endpoints",
+        name: 'Auth',
+        description: 'Authentication endpoints',
       },
       {
-        name: "Users",
-        description: "User management endpoints",
+        name: 'Users',
+        description: 'User management endpoints',
       },
       {
-        name: "Collections",
-        description: "Collection management endpoints",
+        name: 'Collections',
+        description: 'Collection management endpoints',
       },
       {
-        name: "Entries",
-        description: "Entry management within collections",
+        name: 'Entries',
+        description: 'Entry management within collections',
       },
       {
-        name: "Schema",
-        description: "Schema management for collections",
+        name: 'Schema',
+        description: 'Schema management for collections',
       },
     ],
   },
-  apis: ["./src/routes/*.ts", "./src/routes/**/*.ts"],
-};
+  apis: ['./src/routes/*.ts', './src/routes/**/*.ts'],
+}
 
-const swaggerSpec = swaggerJsdoc(options);
+const swaggerSpec = swaggerJsdoc(options)
 
-export default swaggerSpec;
+export default swaggerSpec

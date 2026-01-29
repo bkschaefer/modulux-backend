@@ -7,7 +7,7 @@ export interface IUserSchema {
   userName: string
   verified: boolean
   admin: boolean
-  roles: Role[];
+  roles: Role[]
   createtAt: Date
   updatetAt: Date
 }
@@ -16,7 +16,6 @@ export type TUserResource = Pick<
   IUserSchema,
   'email' | 'verified' | 'admin' | 'userName' | 'roles'
 > & { id: string }
-
 
 export interface IUserMethods {
   toResourceObject(): TUserResource

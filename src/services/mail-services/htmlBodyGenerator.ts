@@ -1,53 +1,53 @@
-import { env } from "../../env";
-import fs from "fs";
-import { MAILIDENTIFIER } from "./mailIdentifer.enum";
-import { logger } from "../../logger";
+import { env } from '../../env'
+import fs from 'fs'
+import { MAILIDENTIFIER } from './mailIdentifer.enum'
+import { logger } from '../../logger'
 
 //wandelt SVGs zu Inline
 function svgToInline(path: string) {
-  const svgData = fs.readFileSync(path, "utf8");
-  return Buffer.from(svgData).toString("base64");
+  const svgData = fs.readFileSync(path, 'utf8')
+  return Buffer.from(svgData).toString('base64')
 }
 
 interface GenerateHtmlBodyOptions {
-  mailIdentifier: MAILIDENTIFIER;
-  inviterName?: string;
-  inviteToken?: string;
-  resetToken?: string;
-  newUserName?: string;
+  mailIdentifier: MAILIDENTIFIER
+  inviterName?: string
+  inviteToken?: string
+  resetToken?: string
+  newUserName?: string
 }
 
 //Identifierhandler
 export function generateHtmlBodyHandler(options: GenerateHtmlBodyOptions) {
   const { mailIdentifier, inviterName, inviteToken, resetToken, newUserName } =
-    options;
-  let htmlBody;
-  htmlBody = generateEmailHead();
+    options
+  let htmlBody
+  htmlBody = generateEmailHead()
   try {
     switch (mailIdentifier) {
       case MAILIDENTIFIER.INVITEMAIL:
-        htmlBody += generateEmailInvite(inviteToken!, inviterName!);
-        break;
+        htmlBody += generateEmailInvite(inviteToken!, inviterName!)
+        break
       case MAILIDENTIFIER.RESETPASSMAIL:
-        htmlBody += generateEmailPassReset(resetToken!);
-        break;
+        htmlBody += generateEmailPassReset(resetToken!)
+        break
       case MAILIDENTIFIER.INVITEMAIL:
-        htmlBody += generateEmailInvite(inviteToken!, inviterName!);
-        break;
+        htmlBody += generateEmailInvite(inviteToken!, inviterName!)
+        break
       case MAILIDENTIFIER.WELCOMEMAIL:
-        htmlBody += generateEmailWelcome(newUserName!);
-        break;
+        htmlBody += generateEmailWelcome(newUserName!)
+        break
       case MAILIDENTIFIER.UPDATEMAIL:
-        generateEmailNotification();
-        break;
+        generateEmailNotification()
+        break
       default:
-        throw new Error("Unknown mail identifier.");
+        throw new Error('Unknown mail identifier.')
     }
-    htmlBody += generateEmailFoot();
-    return htmlBody;
+    htmlBody += generateEmailFoot()
+    return htmlBody
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    logger.error("Error generating email body:", message);
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    logger.error('Error generating email body:', message)
   }
 }
 
@@ -56,7 +56,7 @@ function generateEmailPassReset(resetToken: string) {
   <body>
     <div class="container">
       <div class="logo-wrapper">
-        <img src="data:image/svg+xml;base64,${svgToInline("public/images/Logo.svg")}" alt="Logo" width="42" height="64">
+        <img src="data:image/svg+xml;base64,${svgToInline('public/images/Logo.svg')}" alt="Logo" width="42" height="64">
       </div>
       <h1>Reset Password</h1>
       <p>
@@ -70,7 +70,7 @@ function generateEmailPassReset(resetToken: string) {
       </div>
     </div>
   </body>
-`;
+`
 }
 
 export function generateEmailInvite(inviteToken: string, inviterName: string) {
@@ -78,7 +78,7 @@ export function generateEmailInvite(inviteToken: string, inviterName: string) {
   <body>
     <div class="container">
        <div class="logo-wrapper">
-         <img src="data:image/svg+xml;base64,${svgToInline("public/images/Logo.svg")}" alt="Logo" width="42" height="64">
+         <img src="data:image/svg+xml;base64,${svgToInline('public/images/Logo.svg')}" alt="Logo" width="42" height="64">
         </div>
       <h1>Hallo von Modulux!</h1>
       <p>
@@ -91,7 +91,7 @@ export function generateEmailInvite(inviteToken: string, inviterName: string) {
       </div>
     </div>
   </body>
-`;
+`
 }
 
 function generateEmailWelcome(newUserName: string) {
@@ -103,11 +103,11 @@ function generateEmailWelcome(newUserName: string) {
               <p>Enjoy and a warm welcome!</p>
               <img 
                 class="bottom-right-image" 
-                src="data:image/svg+xml;base64,${svgToInline("public/images/welcome_picture.svg")}" 
+                src="data:image/svg+xml;base64,${svgToInline('public/images/welcome_picture.svg')}" 
                 alt="Logo"/>            
             </div>
           </body>
-`;
+`
 }
 
 function generateEmailNotification() {
@@ -205,8 +205,8 @@ function generateEmailHead() {
         }
       }
     </style>
-  </head>`;
+  </head>`
 }
 function generateEmailFoot() {
-  return "</html>";
+  return '</html>'
 }
