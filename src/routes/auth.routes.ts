@@ -221,15 +221,13 @@ authRouter.get(
   requiresAuthentication,
   catchAsync(async (req, res) => {
     const applications = await getAllApplications()
-    res
-      .status(200)
-      .json(
-        applications.map((app) => ({
-          url: app.url,
-          id: app.id,
-          secret: app.secret,
-        })),
-      )
+    res.status(200).json(
+      applications.map((app) => ({
+        url: app.url,
+        id: app.id,
+        secret: app.secret,
+      })),
+    )
   }),
 )
 
